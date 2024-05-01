@@ -1,6 +1,7 @@
 package com.ecom.ecommercebackend.service;
 
 import com.ecom.ecommercebackend.api.model.RegistrationBody;
+import com.ecom.ecommercebackend.exception.UserAlreadyExistsException;
 import com.ecom.ecommercebackend.model.LocalUser;
 import com.ecom.ecommercebackend.model.dao.LocalUserDao;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,12 @@ public class UserService {
         this.localUserDao = localUserDao;
     }
 
-    public LocalUser registerUser(RegistrationBody registerBody) {
+    public LocalUser registerUser(RegistrationBody registerBody) throws UserAlreadyExistsException {
+        if (localUserDao.findByEmailIgnoreCase(registerBody.getEmail()).isPresent()
+                || localUserDao.findByUsernameIgnoreCase(registerBody.getUsername()).isPresent()) {
+            throw new UserAlreadyExistsException();
+        }
+
         LocalUser user = new LocalUser();
         user.setEmail(registerBody.getEmail());
         user.setFirstName(registerBody.getFirstName());

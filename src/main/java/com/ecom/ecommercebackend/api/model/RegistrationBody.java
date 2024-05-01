@@ -1,7 +1,10 @@
 package com.ecom.ecommercebackend.api.model;
 
+import jakarta.validation.constraints.Email;
+
 public class RegistrationBody {
     private String username;
+    @Email
     private String email;
     private String password;
     private String firstName;
@@ -41,5 +44,4 @@ public class RegistrationBody {
     public void setUsername(String username) {
         this.username = username;
     }
-    
 }
